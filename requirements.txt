@@ -1,0 +1,12 @@
+python-dotenv==1.0.0
+pyyaml==6.0
+huggingface-hub==0.23.0
+sentence-transformers==2.2.2
+chromadb==0.4.1
+yfinance==0.2.33
+pandas-datareader==0.10.0
+feedparser==6.0.10
+langgraph==0.0.45
+streamlit==1.28.1
+pandas==2.1.1
+requests==2.31.0
