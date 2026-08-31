@@ -264,22 +264,20 @@ class ChromaStore:
         """
         Search within a date range.
 
+        Note: Date range filtering is disabled due to Chroma v0.4 limitations
+        with string datetime comparisons. Use post-processing instead.
+
         Args:
             query_text: Search query
-            start_date: ISO-8601 start date (e.g., "2024-01-01")
-            end_date: ISO-8601 end date (e.g., "2024-01-31")
+            start_date: ISO-8601 start date (e.g., "2024-01-01") [NOT USED]
+            end_date: ISO-8601 end date (e.g., "2024-01-31") [NOT USED]
             top_k: Number of results
 
         Returns:
-            List of articles published in date range
+            List of articles (date range filtering not applied)
         """
-        where = {
-            "$and": [
-                {"published_at": {"$gte": start_date}},
-                {"published_at": {"$lte": end_date}},
-            ]
-        }
-        return self.search(query_text, top_k=top_k, where=where)
+        # TODO: Implement date filtering via post-processing
+        return self.search(query_text, top_k=top_k, where=None)
 
     def get_collection_stats(self) -> dict:
         """

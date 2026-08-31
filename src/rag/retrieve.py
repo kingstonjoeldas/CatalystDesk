@@ -68,7 +68,12 @@ class Retriever:
         logger.info(f"  Filter: (date filtering disabled for Chroma v0.4 compatibility)")
 
         # Combine filters (all must match)
-        where = {"$and": filters} if len(filters) > 1 else filters[0]
+        if len(filters) > 1:
+            where = {"$and": filters}
+        elif len(filters) == 1:
+            where = filters[0]
+        else:
+            where = None
 
         results = self.store.search(query, top_k=top_k, where=where)
 
