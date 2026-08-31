@@ -18,9 +18,14 @@ Productionization path:
 But for MVP, Streamlit handles everything end-to-end.
 """
 
+import sys
 import time
 import streamlit as st
 from datetime import datetime
+from pathlib import Path
+
+# Add parent directory to path so we can import src
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.logging_utils import get_request_logger, set_request_id
 from src.agents.graph import run_agent_graph
