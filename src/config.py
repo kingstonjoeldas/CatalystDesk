@@ -5,7 +5,12 @@ from pathlib import Path
 from typing import Optional
 import logging
 
-from dotenv import load_dotenv
+# Try to load .env (for local development; optional for Streamlit Cloud)
+try:
+    from dotenv import load_dotenv
+    _DOTENV_AVAILABLE = True
+except ImportError:
+    _DOTENV_AVAILABLE = False
 
 # Try to import Streamlit (for Cloud deployment)
 try:
@@ -15,8 +20,9 @@ except ImportError:
     _STREAMLIT_AVAILABLE = False
 
 
-# Load .env early (for local development)
-load_dotenv(override=False)
+# Load .env early (for local development, optional for Streamlit Cloud)
+if _DOTENV_AVAILABLE:
+    load_dotenv(override=False)
 
 # If running in Streamlit and secrets are available, use them
 if _STREAMLIT_AVAILABLE:
