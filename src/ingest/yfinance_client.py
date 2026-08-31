@@ -108,8 +108,8 @@ class YFinanceClient:
         for attempt in range(cls.MAX_RETRIES):
             try:
                 ticker_obj = yf.Ticker(ticker)
-                # Fetch last N days
-                hist = ticker_obj.history(period=period, progress=False)
+                # Fetch last N days (progress parameter removed in newer yfinance)
+                hist = ticker_obj.history(period=period)
 
                 if hist.empty:
                     logger.warning(f"No OHLCV data for {ticker}")

@@ -61,16 +61,11 @@ class Retriever:
             filters.append({"risk_level": {"$eq": risk_level}})
             logger.info(f"  Filter: risk_level={risk_level}")
 
-        # Date range filter
-        end_date = datetime.utcnow()
-        start_date = end_date - timedelta(days=days_back)
-        filters.append({
-            "$and": [
-                {"published_at": {"$gte": start_date.isoformat()}},
-                {"published_at": {"$lte": end_date.isoformat()}},
-            ]
-        })
-        logger.info(f"  Filter: published in last {days_back} days")
+        # Date range filter (disabled for Chroma compatibility - filters on ISO strings not supported)
+        # TODO: Implement date filtering via post-processing instead
+        # end_date = datetime.utcnow()
+        # start_date = end_date - timedelta(days=days_back)
+        logger.info(f"  Filter: (date filtering disabled for Chroma v0.4 compatibility)")
 
         # Combine filters (all must match)
         where = {"$and": filters} if len(filters) > 1 else filters[0]

@@ -47,7 +47,7 @@ class ContradictionDetector:
                 brief_summary[:512],
                 labels,
                 hypothesis_template=hypothesis_template,
-                multi_class=False,
+                multi_label=False,
             )
 
             sentiment = result.get("labels", ["neutral"])[0]
