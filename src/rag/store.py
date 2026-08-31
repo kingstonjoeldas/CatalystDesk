@@ -26,7 +26,6 @@ from pathlib import Path
 from typing import Optional
 
 import chromadb
-from chromadb.config import Settings
 
 from src.config import Config
 from src.logging_utils import get_request_logger
@@ -56,15 +55,9 @@ class ChromaStore:
             shutil.rmtree(self.db_dir)
             self.db_dir.mkdir(parents=True, exist_ok=True)
 
-        # Initialize Chroma client (persistent)
-        settings = Settings(
-            chroma_db_impl="duckdb+parquet",
-            persist_directory=str(self.db_dir),
-            anonymized_telemetry=False,
-        )
-
+        # Initialize Chroma client (persistent) - using new API
         try:
-            self.client = chromadb.Client(settings)
+            self.client = chromadb.PersistentClient(path=str(self.db_dir))
             logger.info(f"✓ Chroma client initialized at {self.db_dir}")
         except Exception as e:
             logger.error(f"Failed to initialize Chroma: {e}")
