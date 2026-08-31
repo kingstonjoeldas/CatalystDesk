@@ -80,5 +80,11 @@ def get_request_logger(name: str, log_dir: Optional[Path] = None) -> logging.Log
     return logger
 
 
-# Module-level logger
-logger = get_request_logger(__name__)
+# Module-level logger (lazy initialization to avoid import issues)
+_module_logger = None
+
+def get_module_logger():
+    global _module_logger
+    if _module_logger is None:
+        _module_logger = get_request_logger(__name__)
+    return _module_logger

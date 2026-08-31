@@ -95,7 +95,7 @@ class ResearcherAgent:
         logger.info(f"Researcher: retrieving context for query: {query}")
 
         try:
-            # Retrieve articles
+            # Try to retrieve articles
             if ticker:
                 logger.info(f"  Filtering by ticker: {ticker}")
                 results = self.retriever.retrieve_for_query(
@@ -123,11 +123,16 @@ class ResearcherAgent:
             state["retrieval_count"] = len(articles)
             state["agent_steps"].append("researcher")
 
-            logger.info(f"✓ Researcher: retrieved {len(articles)} articles")
+            if len(articles) == 0:
+                logger.warning("⚠ Researcher: No articles found (Chroma DB may be empty)")
+                state["retrieval_error"] = "No articles found - Chroma DB may need to be populated"
+            else:
+                logger.info(f"✓ Researcher: retrieved {len(articles)} articles")
 
         except Exception as e:
             logger.error(f"✗ Researcher failed: {e}")
-            state["retrieval_error"] = str(e)
+            logger.warning("⚠ Retriever unavailable - continuing with empty context")
+            state["retrieval_error"] = f"Retrieval failed: {str(e)}"
             state["retrieved_articles"] = []
             state["retrieval_count"] = 0
             state["agent_steps"].append("researcher_failed")
