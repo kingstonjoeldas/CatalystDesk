@@ -24,6 +24,7 @@ Chroma versioning note:
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+import warnings
 
 import chromadb
 
@@ -31,6 +32,9 @@ from src.config import Config
 from src.logging_utils import get_request_logger
 
 logger = get_request_logger(__name__)
+
+# Suppress Chroma deprecation warnings (we're using the new PersistentClient API)
+warnings.filterwarnings("ignore", message=".*deprecated configuration of Chroma.*")
 
 
 class ChromaStore:
