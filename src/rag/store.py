@@ -25,6 +25,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 import warnings
+import sys
+import io
 
 import chromadb
 
@@ -60,8 +62,14 @@ class ChromaStore:
             self.db_dir.mkdir(parents=True, exist_ok=True)
 
         # Initialize Chroma client (persistent) - using new API
+        # Suppress deprecation warnings printed to stderr
         try:
-            self.client = chromadb.PersistentClient(path=str(self.db_dir))
+            old_stderr = sys.stderr
+            sys.stderr = io.StringIO()
+            try:
+                self.client = chromadb.PersistentClient(path=str(self.db_dir))
+            finally:
+                sys.stderr = old_stderr
             logger.info(f"✓ Chroma client initialized at {self.db_dir}")
         except Exception as e:
             logger.error(f"Failed to initialize Chroma: {e}")
